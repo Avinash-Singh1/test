@@ -23,16 +23,25 @@ module.exports = {
   },
   getUserByUserEmail: (email, callBack) => {
     pool.query(
-      `select * from registration where email = ?`,
+      `SELECT * FROM registration WHERE email = ?`,
       [email],
       (error, results, fields) => {
         if (error) {
-          callBack(error);
+          // If there's an error in the query, pass it to the callback
+          return callBack(error);
         }
-        return callBack(null, results[0]);
+  
+        if (results && results.length > 0) {
+          // If there are results, return the first result
+          return callBack(null, results[0]);
+        } else {
+          // If no results found, return a custom error or null
+          return callBack(null, null);
+        }
       }
     );
   },
+  
   getUserByUserId: (id, callBack) => {
     pool.query(
       `select id,firstName,lastName,gender,email,number from registration where id = ?`,

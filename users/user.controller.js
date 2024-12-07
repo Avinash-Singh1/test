@@ -20,6 +20,7 @@ const razorpay = new Razorpay({
 
 
 // Twilio credentials from the Twilio console
+// Twilio credentials from the Twilio console
 const accountSid = process.env.ACCOUNTSID;// Replace with your Account SID
 const authToken = process.env.AUTHTOKEN;   // Replace with your Auth Token
 
@@ -70,7 +71,8 @@ module.exports = {
           return res.json({
             success: 1,
             message: "login successfully",
-            token: jsontoken
+            token: jsontoken,
+            role:results.role
           });
         } else {
           return res.json({
@@ -81,37 +83,57 @@ module.exports = {
       });
     },
 
-    sendinfo:  async (req, res) => {
-      const {destination,source,travelDate,travelTime} = req.body;
+    sendinfo: async (req, res) => {
+      const { destination, source, travelDate, travelTime } = req.body;
+    
       try {
+        // Properly format the message body for WhatsApp
+        const messageBody = `
+    🚗 *Travel Auto Booking Confirmation*
+    
+    Hello! 🎉 
+    
+    Your appointment has been successfully booked!
+    
+    🔹 *Source:* ${source}
+    🔹 *Destination:* ${destination}
+    📅 *Travel Date:* ${travelDate}
+    ⏰ *Travel Time:* ${travelTime}
+    
+    Thank you for choosing our service! Have a safe and pleasant journey! 😊
+    
+    To manage your booking, visit our website or contact our support.
+    
+    Best regards,
+    *Travel Auto Booking Team*
+        `;
+    
+        // Send the WhatsApp message via Twilio
         const message = await client.messages.create({
           from: 'whatsapp:+14155238886',  // Twilio Sandbox WhatsApp number
-          to: 'whatsapp:+917011167639', // WhatsApp recipient's phone number with country code
-          body: `🚗 *Travel Auto Booking Confirmation*
-
-          Hello! 🎉 
-          
-          Your appointment has been successfully booked!
-          
-          🔹 *Source:* ${source}
-          🔹 *Destination:* ${destination}
-          📅 *Travel Date:* ${travelDate}
-          ⏰ *Travel Time:* ${travelTime}
-          
-          Thank you for choosing our service! Have a safe and pleasant journey! 😊
-          
-          To manage your booking, visit our website or contact our support.
-          
-          Best regards,
-          _Travel Auto Booking Team_`,// Message body
-          // mediaUrl: ['https://images.unsplash.com/photo-1723719436141-11775613c0f8?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'] 
-           });
+          to: 'whatsapp:+917011167639',    // WhatsApp recipient's phone number with country code
+          body: messageBody                // The properly formatted message body
+        });
     
-        console.log('Message sent:', message.sid);
+        // Send a success response back to the client
+        return res.json({
+          success: 1,
+          message: "Message sent successfully"
+        });
+    
+        console.log('Message sent:', message.sid);  // Log message SID for reference
+    
       } catch (error) {
+        // Handle any errors during the message send process
         console.error('Error sending message:', error);
+    
+        return res.json({
+          success: 0,
+          message: "Message sending failed"
+        });
       }
     },
+    
 
     appointmentpay: async(req,res)=> {
       const { amount, currency, receipt, bookingData } = req.body;
@@ -203,7 +225,6 @@ module.exports = {
       });
     },
     getAutocomplete:async (req, res) => {
-      console.log("Hi")
       const { input } = req.query;
     
       if (!input) {
@@ -214,7 +235,6 @@ module.exports = {
         const autocompleteUrl = `https://maps.gomaps.pro/maps/api/place/queryautocomplete/json?input=${encodeURIComponent(input)}&key=${GOOGLE_MAPS_API_KEY}`;
         const response = await axios.get(autocompleteUrl);
         // Send the predictions back to the client
-        console.log("response: ",response);
         return res.json(response.data);
       } catch (error) {
         console.error('Error fetching autocomplete suggestions:', error);
@@ -222,7 +242,6 @@ module.exports = {
       }
     },
     getDirections:async (req, res) => {
-      console.log("i am in: ");
       const { source, destination } = req.query;
     
       if (!source || !destination) {
@@ -238,7 +257,6 @@ module.exports = {
         if (directions.status === "ZERO_RESULTS") {
           return res.status(404).send('No route found');
         }
-        console.log("repsonse success");
 
         return res.json(directions);
       } catch (error) {
