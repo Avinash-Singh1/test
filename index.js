@@ -26,11 +26,11 @@ app.use(express.static(path.join(path.resolve(), "Quickauto")));
 
 // app.use("/api/users",userRouter);
 const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
-
+// console.log(process.env.DATABASE, process.env.USER, process.env.PASSWORD,process.env.HOST);
 // Directions API Route
 const sequelize = new Sequelize(process.env.DATABASE, process.env.USER, process.env.PASSWORD, {
-  host: process.env.DB_HOST,
-  dialect: 'mysql', // Use 'mysql' for MySQL
+  host: process.env.HOST,
+  dialect: 'mysql', 
 });
 
 
