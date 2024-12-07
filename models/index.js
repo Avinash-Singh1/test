@@ -12,6 +12,6 @@ db.Sequelize = Sequelize;
 
 db.DriversMaster = require('./DriversMaster')(sequelize, DataTypes);
 db.DriverSchedule = require('./DriverSchedule')(sequelize, DataTypes);
-db.availability = require('./availability')(sequelize, DataTypes);
+db.availability = require('./Availability')(sequelize, DataTypes);
 
 module.exports = db;
