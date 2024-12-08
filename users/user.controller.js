@@ -72,6 +72,9 @@ module.exports = {
             success: 1,
             message: "login successfully",
             token: jsontoken,
+            name:results.firstname,
+            email:results.email,
+            mobile:results.number,
             role:results.role
           });
         } else {
