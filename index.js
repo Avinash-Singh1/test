@@ -16,10 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.static(path.join(path.resolve(), "Quickauto")));
-console.log({username: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
-  host: process.env.HOST,});
+
 app.get('/api/booking', async (req, res) => {
   try {
     console.log("Transaction");
