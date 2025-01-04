@@ -1,21 +1,19 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # Compiled output
-Quickauto.zip
-index1.txt
-index2.txt
-index3.txt
-indexfinal.txt
 /dist
 /tmp
 /out-tsc
 /bazel-out
 .env
+index2.txt
+index3.txt
 # Node
 /node_modules
 npm-debug.log
 yarn-error.log
-
+index.txt
+indexfinal.txt
 # IDEs and editors
 .idea/
 .project

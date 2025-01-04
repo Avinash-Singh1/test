@@ -7,7 +7,8 @@ const { createUser,
     sendinfo,
     appointmentpay,
     getDirections,
-    getAutocomplete} = require("./user.controller");
+    getAutocomplete,
+    savebookingdata} = require("./user.controller");
 const router = require("express").Router();
 const {checkToken} =require("../auth/token_verification");
 
@@ -17,6 +18,8 @@ router.post("/create", createUser);
 router.post("/login", login);
 router.post("/sendinfo", sendinfo);
 router.post("/createOrder", appointmentpay);
+router.post("/savebookingdata", savebookingdata);
+
 router.get("/:id",checkToken, getUserByUserId);
 // router.post("/login", login);
 router.patch("/",checkToken, updateUsers);
