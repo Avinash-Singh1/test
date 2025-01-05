@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const DriverSchedule = sequelize.define('driver_schedule', {
+    const DriverSchedule = sequelize.define('driver_schedules', {
       sid: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       d_id: DataTypes.INTEGER,
       date: DataTypes.DATEONLY,
